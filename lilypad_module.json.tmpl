@@ -1,0 +1,38 @@
+{
+    "machine": {
+        "gpu": 0,
+        "cpu": 1000,
+        "ram": 6000
+    },
+    "job": {
+        "APIVersion": "v1",
+        "Spec": {
+            "Deal": {
+                "Concurrency": 1
+            },
+            "Docker": {
+                "Entrypoint": ["python", "/workspace/run_inference.py"],
+                "WorkingDirectory": "/workspace",
+                "EnvironmentVariables": [
+                    {{ if .input_text }}"input_text={{ js .input_text }}"{{ else }}"input_text=Default text for analysis"{{ end }}
+                ],
+                "Image": "pbillingsby/paraphraser:v1"
+            },
+            "Engine": "Docker",
+            "Network": {
+                "Type": "None"
+            },
+            "Outputs": [
+                {
+                    "Name": "outputs",
+                    "Path": "/outputs"
+                }
+            ],
+            "Resources": {
+                "CPU": "1",
+                "Memory": "4000"
+            },
+            "Timeout": 600
+        }
+    }
+}
